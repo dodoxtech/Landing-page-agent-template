@@ -45,7 +45,7 @@ Walk through standard landing page sections one at a time, asking for real conte
 - **Final CTA**
 - **Footer** — links, legal, contact info
 
-Capture the user's actual wording. Do not draft placeholder or invented copy — this section of the brief must reflect what the user actually said.
+Capture the user's actual wording first — do not draft placeholder or invented copy while gathering. Once all relevant sections have raw answers, follow **[Copywriting Reference](references/copywriting.md)** to filter each section down to its core idea and tighten it into standard, persuasive landing-page copy. That process never invents facts — it only rewrites phrasing/structure — and it shows the user original vs. polished copy for confirmation before anything is treated as final. Use the confirmed, polished version in the brief's Section-by-section copy.
 
 ### Step 3 — Emotional tone → design direction
 
@@ -79,7 +79,7 @@ created: <today's date, YYYY-MM-DD>
 Body sections, in order:
 
 1. **Goals & Audience** — from Step 1
-2. **Section-by-section copy** — from Step 2, verbatim from the interview
+2. **Section-by-section copy** — from Step 2, the confirmed polished copy (post `landing-page-copywriting`), not the raw transcript
 3. **Design Direction** — the confirmed tone, the trending aesthetic(s) it draws from, and the confirmed design skill(s) and rationale from Step 3
 4. **i18n / SEO / GEO Technical Build Checklist** — concrete and stack-specific (Next.js App Router + next-intl):
    - `app/[locale]/` route structure with one folder per locale
@@ -92,6 +92,7 @@ Body sections, in order:
    - `hreflang` tags via next-intl's locale routing
    - Per-locale keyword targets, if provided in Step 4
    - Fully responsive layout: mobile-first CSS, tested breakpoints for mobile, tablet, and desktop, no fixed-width sections, touch-friendly tap targets and nav (e.g. mobile hamburger/drawer) on small screens
+   - Post-deploy monitoring: GA4 (event/conversion tracking — page_view, CTA clicks, form submits, scroll depth) and Microsoft Clarity (heatmaps + session replay), both loaded via `next/script` in the root layout, gated behind a cookie-consent check if targeting GDPR regions
 5. **Follow-ups**:
    - Link back to `[[Specs MOC]]`
    - Note which design skill(s) to invoke next
@@ -107,10 +108,11 @@ Create one task note per item using `docs/Templates/Task Template.md`, saved to 
 
 1. **Project scaffold** — Next.js App Router init, `next-intl` config, `app/[locale]/` routing skeleton
 2. **SEO/GEO base** — `generateMetadata`, `sitemap.ts`, `robots.ts`, `llms.txt`, JSON-LD components
-3. **Design system setup** — apply the confirmed design skill's tokens (typography/color/spacing/motion)
-4. **One task per landing page section** (Hero, Problem, Features, Social proof, Pricing, FAQ, Final CTA, Footer) — each task's Description quotes the exact copy from the brief and states the responsive behavior expected at mobile/tablet/desktop
-5. **i18n content wiring** — message catalogs per locale, populated with the translated copy
-6. **QA pass** — responsive check across breakpoints, structured data validation, SEO/GEO checklist verification
+3. **Analytics & monitoring setup** — add GA4 (event tracking for page_view, each CTA click, form submits, scroll depth) and Microsoft Clarity (heatmaps + session replay) via `next/script` in the root layout; wire a cookie-consent gate if targeting GDPR regions
+4. **Design system setup** — apply the confirmed design skill's tokens (typography/color/spacing/motion)
+5. **One task per landing page section** (Hero, Problem, Features, Social proof, Pricing, FAQ, Final CTA, Footer) — each task's Description quotes the exact copy from the brief and states the responsive behavior expected at mobile/tablet/desktop
+6. **i18n content wiring** — message catalogs per locale, populated with the translated copy
+7. **QA pass** — responsive check across breakpoints, structured data validation, SEO/GEO checklist verification, and confirm GA4/Clarity are firing correctly
 
 Each task note links back to `[[Tasks MOC]]` and to the brief note by name.
 
