@@ -53,7 +53,9 @@ Ask what emotional tone(s) the page should evoke. Offer examples to anchor the a
 
 **Consult `.agents/skills/design-aesthetics/SKILL.md`** — it's a maintained catalog of current design aesthetics (neo-brutalism, editorial minimalism, agency-grade polish, kinetic motion, grainy gradients, glassmorphism, Y2K/retro-futurism, full brand identity, etc.), each with concrete visual characteristics and the industries/tones it fits. Match the user's stated tone/industry/references against that catalog rather than inventing aesthetic descriptions from scratch. That skill also documents which design skill(s) in this repo execute each aesthetic, including blends when one aesthetic needs more than one skill.
 
-Present the recommendation with rationale that names the specific aesthetic(s) from the catalog it draws from and why they fit this product/audience — not just a tone-to-skill mapping. Then explicitly ask the user to confirm it or pick a different direction. Do not finalize the brief until the user has confirmed the design direction.
+**Then brainstorm motion direction the same way — grounded, not decorative.** Don't pick a motion effect off a shelf. Look back at what the product actually *is* (Step 1) and what its sections actually describe (Step 2): does it have physical components (→ an exploded-view/scrollytelling reveal could make sense), a multi-step process (→ a sequential pipeline/flow animation), a before/after transformation (→ a morph/transition), or nothing structurally distinctive (→ motion should stay restrained and support reading, not perform). Generate 2-3 concepts *specific to this product's actual mechanic or content structure*, reject any that are generic defaults (fade-up-on-scroll, generic particle backgrounds, directionless parallax) unless nothing more specific fits, and if the confirmed aesthetic direction is time-sensitive (kinetic/motion-heavy styles date quickly), use WebSearch to sanity-check the concept against recent Awwwards/Codrops case studies before presenting it.
+
+Present the design direction and motion direction together as one recommendation, with rationale that names the specific aesthetic(s) from the catalog and the specific motion concept(s) and why each fits this product/audience — not just a tone-to-skill mapping. Then explicitly ask the user to confirm both or pick a different direction. Do not finalize the brief until the user has confirmed.
 
 ### Step 4 — i18n / SEO / GEO requirements
 
@@ -62,6 +64,10 @@ Ask for:
 - Target keywords per locale (optional — mention `/seo-audit` is available for deeper keyword research)
 - Structured data needs (Organization, Product, FAQ schema)
 - GEO needs — whether they want a `llms.txt` summary and answer-style content blocks written for AI answer engines, not just traditional search crawlers
+
+### Step 5 — Product imagery
+
+Ask whether the user has real product/lifestyle photos to upload, or needs imagery generated from scratch. If they have real photos, invoke `product-photo-preprocessing` (see `.agents/skills/product-photo-preprocessing/SKILL.md`) — it assesses the uploads against [Product Imagery Reference](references/product-imagery.md), matches them to sections, flags gaps, fills gaps via `imagegen-frontend-web`/`imagegen-frontend-mobile`, and produces a confirmed, renamed image manifest. If the user has no real photos at all, skip straight to generation via `imagegen-frontend-web`/`imagegen-frontend-mobile` for whichever sections need imagery.
 
 ## Output
 
@@ -80,7 +86,7 @@ Body sections, in order:
 
 1. **Goals & Audience** — from Step 1
 2. **Section-by-section copy** — from Step 2, the confirmed polished copy (post `landing-page-copywriting`), not the raw transcript
-3. **Design Direction** — the confirmed tone, the trending aesthetic(s) it draws from, and the confirmed design skill(s) and rationale from Step 3
+3. **Design Direction** — the confirmed tone, the trending aesthetic(s) it draws from, the confirmed design skill(s) and rationale, and the confirmed motion concept(s) with the product-specific rationale behind them, from Step 3
 4. **i18n / SEO / GEO Technical Build Checklist** — concrete and stack-specific (Next.js App Router + next-intl):
    - `app/[locale]/` route structure with one folder per locale
    - `next-intl` config and message catalogs per locale
@@ -93,7 +99,8 @@ Body sections, in order:
    - Per-locale keyword targets, if provided in Step 4
    - Fully responsive layout: mobile-first CSS, tested breakpoints for mobile, tablet, and desktop, no fixed-width sections, touch-friendly tap targets and nav (e.g. mobile hamburger/drawer) on small screens
    - Post-deploy monitoring: GA4 (event/conversion tracking — page_view, CTA clicks, form submits, scroll depth) and Microsoft Clarity (heatmaps + session replay), both loaded via `next/script` in the root layout, gated behind a cookie-consent check if targeting GDPR regions
-5. **Follow-ups**:
+5. **Image manifest** — from Step 5's confirmed output: final filename, source (real/generated/enhanced), and target section for each image
+6. **Follow-ups**:
    - Link back to `[[Specs MOC]]`
    - Note which design skill(s) to invoke next
    - Note that `/seo-audit` can be run for deeper keyword research once the brief is approved
@@ -109,8 +116,8 @@ Create one task note per item using `docs/Templates/Task Template.md`, saved to 
 1. **Project scaffold** — Next.js App Router init, `next-intl` config, `app/[locale]/` routing skeleton
 2. **SEO/GEO base** — `generateMetadata`, `sitemap.ts`, `robots.ts`, `llms.txt`, JSON-LD components
 3. **Analytics & monitoring setup** — add GA4 (event tracking for page_view, each CTA click, form submits, scroll depth) and Microsoft Clarity (heatmaps + session replay) via `next/script` in the root layout; wire a cookie-consent gate if targeting GDPR regions
-4. **Design system setup** — apply the confirmed design skill's tokens (typography/color/spacing/motion)
-5. **One task per landing page section** (Hero, Problem, Features, Social proof, Pricing, FAQ, Final CTA, Footer) — each task's Description quotes the exact copy from the brief and states the responsive behavior expected at mobile/tablet/desktop
+4. **Design system setup** — apply the confirmed design skill's tokens (typography/color/spacing) and implement the confirmed motion concept(s) from the brief
+5. **One task per landing page section** (Hero, Problem, Features, Social proof, Pricing, FAQ, Final CTA, Footer) — each task's Description quotes the exact copy from the brief, names the exact image filename(s) from the Image manifest for that section, and states the responsive behavior expected at mobile/tablet/desktop
 6. **i18n content wiring** — message catalogs per locale, populated with the translated copy
 7. **QA pass** — responsive check across breakpoints, structured data validation, SEO/GEO checklist verification, and confirm GA4/Clarity are firing correctly
 
